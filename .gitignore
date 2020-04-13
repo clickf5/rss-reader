@@ -1,0 +1,14 @@
+# idea
+/.idea
+
+# npm
+/node_modules
+
+# dist
+/dist
+
+# tmp
+/tmp
+
+# coverage
+/coverage
