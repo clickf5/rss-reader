@@ -3,6 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
+  entry: './src/js/index.js',
+  output: {
+    filename: './js/[name].js'
+  },
   module: {
     rules: [
       {
@@ -20,10 +24,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'template.html',
+      template: './src/template.html',
     }),
     new MiniCssExtractPlugin({
-      filename: 'style/[name].css',
+      filename: './style/[name].css',
     }),
   ],
 };
