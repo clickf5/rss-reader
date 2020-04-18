@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { html } from 'js-beautify';
 
-import app from "../src/js/application";
+import app from '../src/js/application';
 
 const htmlOptions = {
   preserve_newlines: false,
