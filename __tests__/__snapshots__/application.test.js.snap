@@ -13,6 +13,10 @@ exports[`application 1`] = `
         </form>
         <div class=\\"feedback\\"></div>
     </div>
+    <div class=\\"row\\">
+        <div class=\\"col rss-items\\"></div>
+        <div class=\\"col rss-links\\"></div>
+    </div>
     <footer class=\\"footer\\">
         <p>© Eugene Panin</p>
     </footer>
