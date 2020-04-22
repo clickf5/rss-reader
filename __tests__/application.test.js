@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { html } from 'js-beautify';
 
@@ -12,10 +12,13 @@ const htmlOptions = {
 const fixturesPath = path.join(__dirname, '__fixtures__');
 const getTree = () => html(document.body.innerHTML, htmlOptions);
 
-beforeEach(() => {
-  const initHtml = fs.readFileSync(path.join(fixturesPath, 'index.html')).toString();
-  document.documentElement.innerHTML = initHtml;
-  app();
+beforeEach((done) => {
+  fs.readFile(path.join(fixturesPath, 'index.html')).then(data => {
+    const initHTML = data.toString();
+    document.documentElement.innerHTML = initHTML;
+    app();
+    done();
+  });
 });
 
 test('application', () => {
