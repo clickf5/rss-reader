@@ -23,3 +23,27 @@ exports[`application 1`] = `
 </div> <!-- container -->
 <script src=\\"./js/main.js\\"></script>"
 `;
+
+exports[`application 2`] = `
+"<div class=\\"container mt-5\\">
+    <div class=\\"jumbotron\\">
+        <h1>RSS Reader</h1>
+        <p class=\\"lead\\">Start reading RSS today! It is easy, it is nicely.</p>
+        <form action=\\"\\" class=\\"form-inline rss-form\\">
+            <div class=\\"form-group\\">
+                <input type=\\"text\\" required=\\"\\" name=\\"url\\" class=\\"form-control is-invalid\\" placeholder=\\"rss link\\">
+            </div>
+            <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\">Add</button>
+        </form>
+        <div class=\\"feedback text-danger\\">this must be a valid URL</div>
+    </div>
+    <div class=\\"row\\">
+        <div class=\\"col rss-items\\"></div>
+        <div class=\\"col rss-links\\"></div>
+    </div>
+    <footer class=\\"footer\\">
+        <p>© Eugene Panin</p>
+    </footer>
+</div> <!-- container -->
+<script src=\\"./js/main.js\\"></script>"
+`;
