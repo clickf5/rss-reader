@@ -21,7 +21,7 @@ beforeEach((done) => {
     document.documentElement.innerHTML = initHTML;
     app();
     elements = {
-      urlInput: document.querySelector('[name="url"]'),
+      url: document.querySelector('[name="url"]'),
     };
     done();
   });
@@ -30,14 +30,17 @@ beforeEach((done) => {
 test('application 1', () => {
   expect(getTree()).toMatchSnapshot();
 
-  return userEvent.type(elements.urlInput, 'wrong url', { allAtOnce: true })
+  return Promise
+    .resolve()
+    .then(() => userEvent.type(elements.url, 'wrong url', { allAtOnce: true }))
     .then(() => {
-      elements.urlInput.setAttribute('value', 'wrong url');
+      elements.url.setAttribute('value', 'wrong url');
       expect(getTree()).toMatchSnapshot();
       return Promise.resolve();
     })
+    .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
     .then(() => {
-      elements.urlInput.setAttribute('value', 'https://vc.ru/rss');
+      elements.url.setAttribute('value', 'https://vc.ru/rss');
       expect(getTree()).toMatchSnapshot();
     });
 });
