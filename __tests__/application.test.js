@@ -27,12 +27,17 @@ beforeEach((done) => {
   });
 });
 
-test('application', () => {
+test('application 1', () => {
   expect(getTree()).toMatchSnapshot();
 
-  userEvent.type(elements.urlInput, 'wrong url', { allAtOnce: true })
+  return userEvent.type(elements.urlInput, 'wrong url', { allAtOnce: true })
     .then(() => {
       elements.urlInput.setAttribute('value', 'wrong url');
+      expect(getTree()).toMatchSnapshot();
+      return Promise.resolve();
+    })
+    .then(() => {
+      elements.urlInput.setAttribute('value', 'https://vc.ru/rss');
       expect(getTree()).toMatchSnapshot();
     });
 });
