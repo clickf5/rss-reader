@@ -42,28 +42,24 @@ test('init and wrong url', () => {
     });
 });
 
-test('valid url', () => {
-  return Promise
-    .resolve()
-    .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
-    .then(() => {
-      elements.url.setAttribute('value', 'https://vc.ru/rss');
-      return timer.start(10);
-    })
-    .then(() => {
-      expect(getTree()).toMatchSnapshot();
-    });
-});
+test('valid url', () => Promise
+  .resolve()
+  .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
+  .then(() => {
+    elements.url.setAttribute('value', 'https://vc.ru/rss');
+    return timer.start(10);
+  })
+  .then(() => {
+    expect(getTree()).toMatchSnapshot();
+  }));
 
-test('required url', () => {
-  return Promise
-    .resolve()
-    .then(() => userEvent.type(elements.url, '', { allAtOnce: true }))
-    .then(() => {
-      elements.url.setAttribute('value', '');
-      return timer.start(10);
-    })
-    .then(() => {
-      expect(getTree()).toMatchSnapshot();
-    });
-});
+test('required url', () => Promise
+  .resolve()
+  .then(() => userEvent.type(elements.url, '', { allAtOnce: true }))
+  .then(() => {
+    elements.url.setAttribute('value', '');
+    return timer.start(10);
+  })
+  .then(() => {
+    expect(getTree()).toMatchSnapshot();
+  }));
