@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`application 1 1`] = `
+exports[`init and wrong url 1`] = `
 "<div class=\\"container mt-5\\">
     <div class=\\"jumbotron\\">
         <h1>RSS Reader</h1>
@@ -24,7 +24,7 @@ exports[`application 1 1`] = `
 <script src=\\"./js/main.js\\"></script>"
 `;
 
-exports[`application 1 2`] = `
+exports[`init and wrong url 2`] = `
 "<div class=\\"container mt-5\\">
     <div class=\\"jumbotron\\">
         <h1>RSS Reader</h1>
@@ -33,7 +33,7 @@ exports[`application 1 2`] = `
             <div class=\\"form-group\\">
                 <input type=\\"text\\" required=\\"\\" name=\\"url\\" class=\\"form-control is-invalid\\" placeholder=\\"rss link\\" value=\\"wrong url\\">
             </div>
-            <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\">Add</button>
+            <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\" disabled=\\"\\">Add</button>
         </form>
         <div class=\\"feedback text-danger\\">url must be a valid URL</div>
     </div>
@@ -48,7 +48,31 @@ exports[`application 1 2`] = `
 <script src=\\"./js/main.js\\"></script>"
 `;
 
-exports[`application 1 3`] = `
+exports[`required url 1`] = `
+"<div class=\\"container mt-5\\">
+    <div class=\\"jumbotron\\">
+        <h1>RSS Reader</h1>
+        <p class=\\"lead\\">Start reading RSS today! It is easy, it is nicely.</p>
+        <form action=\\"\\" class=\\"form-inline rss-form\\">
+            <div class=\\"form-group\\">
+                <input type=\\"text\\" required=\\"\\" name=\\"url\\" class=\\"form-control is-invalid\\" placeholder=\\"rss link\\" value=\\"\\">
+            </div>
+            <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\" disabled=\\"\\">Add</button>
+        </form>
+        <div class=\\"feedback text-danger\\">url is a required field</div>
+    </div>
+    <div class=\\"row\\">
+        <div class=\\"col rss-items\\"></div>
+        <div class=\\"col rss-links\\"></div>
+    </div>
+    <footer class=\\"footer\\">
+        <p>© Eugene Panin</p>
+    </footer>
+</div> <!-- container -->
+<script src=\\"./js/main.js\\"></script>"
+`;
+
+exports[`valid url 1`] = `
 "<div class=\\"container mt-5\\">
     <div class=\\"jumbotron\\">
         <h1>RSS Reader</h1>
@@ -60,6 +84,30 @@ exports[`application 1 3`] = `
             <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\">Add</button>
         </form>
         <div class=\\"feedback\\"></div>
+    </div>
+    <div class=\\"row\\">
+        <div class=\\"col rss-items\\"></div>
+        <div class=\\"col rss-links\\"></div>
+    </div>
+    <footer class=\\"footer\\">
+        <p>© Eugene Panin</p>
+    </footer>
+</div> <!-- container -->
+<script src=\\"./js/main.js\\"></script>"
+`;
+
+exports[`required url 1`] = `
+"<div class=\\"container mt-5\\">
+    <div class=\\"jumbotron\\">
+        <h1>RSS Reader</h1>
+        <p class=\\"lead\\">Start reading RSS today! It is easy, it is nicely.</p>
+        <form action=\\"\\" class=\\"form-inline rss-form\\">
+            <div class=\\"form-group\\">
+                <input type=\\"text\\" required=\\"\\" name=\\"url\\" class=\\"form-control is-invalid\\" placeholder=\\"rss link\\" value=\\"\\">
+            </div>
+            <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\" disabled=\\"\\">Add</button>
+        </form>
+        <div class=\\"feedback text-danger\\">url is a required field</div>
     </div>
     <div class=\\"row\\">
         <div class=\\"col rss-items\\"></div>
