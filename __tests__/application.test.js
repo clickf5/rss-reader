@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { html } from 'js-beautify';
 import userEvent from '@testing-library/user-event';
+import timer from 'timer-promise';
 
 import app from '../src/js/application';
 
@@ -35,12 +36,18 @@ test('application 1', () => {
     .then(() => userEvent.type(elements.url, 'wrong url', { allAtOnce: true }))
     .then(() => {
       elements.url.setAttribute('value', 'wrong url');
+      return timer.start(10);
+    })
+    .then(() => {
       expect(getTree()).toMatchSnapshot();
       return Promise.resolve();
     })
     .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
     .then(() => {
       elements.url.setAttribute('value', 'https://vc.ru/rss');
+      return timer.start(10);
+    })
+    .then(() => {
       expect(getTree()).toMatchSnapshot();
     });
 });
