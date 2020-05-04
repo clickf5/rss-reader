@@ -35,7 +35,7 @@ exports[`application 1 2`] = `
             </div>
             <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\">Add</button>
         </form>
-        <div class=\\"feedback text-danger\\">this must be a valid URL</div>
+        <div class=\\"feedback text-danger\\">url must be a valid URL</div>
     </div>
     <div class=\\"row\\">
         <div class=\\"col rss-items\\"></div>
