@@ -1,5 +1,21 @@
 import { watch } from 'melanke-watchjs';
 
+const renderErrors = (ui, errors) => {
+  const { feedback, elements } = ui;
+  Object.entries(elements).forEach(([name, element]) => {
+    const error = errors[name];
+    if (!error) {
+      feedback.classList.remove('text-danger');
+      feedback.innerHTML = '';
+      element.classList.remove('is-invalid');
+      return;
+    }
+    feedback.classList.add('text-danger');
+    feedback.innerHTML = error.message;
+    element.classList.add('is-invalid');
+  });
+};
+
 const setWatchers = (state, ui) => {
   watch(state.form, 'processState', () => {
     const { processState } = state.form;
@@ -22,6 +38,11 @@ const setWatchers = (state, ui) => {
   watch(state.form, 'valid', () => {
     const { submitButton } = ui;
     submitButton.disabled = !state.form.valid;
+  });
+
+  watch(state.form, 'errors', () => {
+    const { errors } = state.form;
+    renderErrors(ui, errors);
   });
 };
 

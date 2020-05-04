@@ -14,7 +14,7 @@ const updateValidationState = (state) => {
     state.form.errors = {};
   } catch (e) {
     const errors = _.keyBy(e.inner, 'path');
-    console.log(errors);
+    // console.log(errors);
     state.form.valid = false;
     state.form.errors = errors;
   }
@@ -39,6 +39,7 @@ const app = () => {
       url: document.querySelector('input[name="url"]'),
     },
     submitButton: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('div.feedback'),
   };
 
   ui.elements.url.addEventListener('input', (e) => {
