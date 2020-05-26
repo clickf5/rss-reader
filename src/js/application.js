@@ -31,6 +31,7 @@ const app = () => {
       valid: true,
       errors: {},
     },
+    streams: [],
   };
 
   const ui = {
@@ -45,6 +46,15 @@ const app = () => {
   ui.elements.url.addEventListener('input', (e) => {
     state.form.fields.url = e.target.value;
     updateValidationState(state);
+  });
+
+  ui.form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    state.form.processState = 'sending';
+    const { url } = state.form.fields;
+    // todo add http request
+    state.streams.push(url);
+    state.form.fields.url = '';
   });
 
   setWatchers(state, ui);
