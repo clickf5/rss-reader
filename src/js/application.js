@@ -57,6 +57,7 @@ const app = () => {
     state.streams.push(url);
     state.form.fields.url = '';
     state.form.processState = 'filling';
+    state.form.valid = true;
   });
 
   setWatchers(state, ui);
