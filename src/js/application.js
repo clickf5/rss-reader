@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import * as yup from 'yup';
 import _ from 'lodash';
+import axios from 'axios';
 import setWatchers from './view';
 
 const getSchema = (arr) => yup.object().shape({
@@ -54,10 +55,19 @@ const app = () => {
     state.form.processState = 'sending';
     const { url } = state.form.fields;
     // todo add http request
-    state.streams.push(url);
-    state.form.fields.url = '';
-    state.form.processState = 'filling';
-    state.form.valid = true;
+    const urlWithCORS = `https://cors-anywhere.herokuapp.com/${url}`;
+    axios.get(urlWithCORS)
+      .then((response) => {
+        console.log('load');
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // state.streams.push(url);
+    // state.form.fields.url = '';
+    // state.form.processState = 'filling';
+    // state.form.valid = true;
   });
 
   setWatchers(state, ui);
