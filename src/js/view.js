@@ -16,6 +16,11 @@ const renderErrors = (ui, errors) => {
   });
 };
 
+const resetUrl = (ui) => {
+  const { url } = ui.elements;
+  url.value = '';
+};
+
 const setWatchers = (state, ui) => {
   watch(state.form, 'processState', () => {
     const { processState } = state.form;
@@ -43,6 +48,13 @@ const setWatchers = (state, ui) => {
   watch(state.form, 'errors', () => {
     const { errors } = state.form;
     renderErrors(ui, errors);
+  });
+
+  watch(state.form.fields, 'url', () => {
+    const { url } = state.form.fields;
+    if (url === '') {
+      resetUrl(ui);
+    }
   });
 };
 

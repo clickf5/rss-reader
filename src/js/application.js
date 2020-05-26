@@ -3,12 +3,13 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import setWatchers from './view';
 
-const schema = yup.object().shape({
-  url: yup.string().required().url(),
+const getSchema = (arr) => yup.object().shape({
+  url: yup.string().required().url().notOneOf(arr),
 });
 
 const updateValidationState = (state) => {
   try {
+    const schema = getSchema(state.streams);
     schema.validateSync(state.form.fields, { abortEarly: false });
     state.form.valid = true;
     state.form.errors = {};
@@ -55,6 +56,7 @@ const app = () => {
     // todo add http request
     state.streams.push(url);
     state.form.fields.url = '';
+    state.form.processState = 'filling';
   });
 
   setWatchers(state, ui);
