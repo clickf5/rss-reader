@@ -22,19 +22,28 @@ const updateValidationState = (state) => {
   }
 };
 
-const parseRSS = (xml) => {
-  const result = {};
-  result.items = [];
-  const mime = 'text/xml';
+const parseRSS = (text) => {
+  const result = {
+    title: '',
+    description: '',
+    items: [],
+  };
+
   const domparser = new DOMParser();
-  const doc = domparser.parseFromString(xml, mime);
-  const items = doc.querySelectorAll('item');
+  const mime = 'text/xml';
+  const xml = domparser.parseFromString(text, mime);
+
+  result.title = xml.querySelector('channel title').textContent;
+  result.description = xml.querySelector('channel description').textContent;
+
+  const items = xml.querySelectorAll('item');
   items.forEach((item) => {
     const title = item.querySelector('title').textContent;
     const description = item.querySelector('description').textContent;
     const link = item.querySelector('link').innerHTML;
     result.items.push({ title, description, link });
   });
+
   return Promise.resolve(result);
 };
 
