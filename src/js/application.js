@@ -22,6 +22,30 @@ const updateValidationState = (state) => {
   }
 };
 
+const parseRSS = (xml) => {
+  const result = {};
+  result.items = [];
+  const mime = 'text/xml';
+  const domparser = new DOMParser();
+  const doc = domparser.parseFromString(xml, mime);
+  const items = doc.querySelectorAll('item');
+  items.forEach((item) => {
+    const title = item.querySelector('title').textContent;
+    const description = item.querySelector('description').textContent;
+    const link = item.querySelector('link').innerHTML;
+    result.items.push({ title, description, link });
+  });
+  return Promise.resolve(result);
+};
+
+const loadStream = (url) => {
+  const corsApiHost = 'cors-anywhere.herokuapp.com';
+  const corsApiUrl = `https://${corsApiHost}/`;
+  const urlWithCors = `${corsApiUrl}${url}`;
+  return axios.get(urlWithCors)
+    .then(({ data }) => parseRSS(data));
+};
+
 const app = () => {
   const state = {
     form: {
@@ -54,20 +78,14 @@ const app = () => {
     e.preventDefault();
     state.form.processState = 'sending';
     const { url } = state.form.fields;
-    // todo add http request
-    const urlWithCORS = `https://cors-anywhere.herokuapp.com/${url}`;
-    axios.get(urlWithCORS)
+
+    loadStream(url)
       .then((response) => {
-        console.log('load');
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
-    // state.streams.push(url);
-    // state.form.fields.url = '';
-    // state.form.processState = 'filling';
-    // state.form.valid = true;
   });
 
   setWatchers(state, ui);
