@@ -21,6 +21,10 @@ const resetUrl = (ui) => {
   url.value = '';
 };
 
+export const renderFeed = (stream, ui) => {
+  console.log(stream);
+};
+
 const setWatchers = (state, ui) => {
   watch(state.form, 'processState', () => {
     const { processState } = state.form;

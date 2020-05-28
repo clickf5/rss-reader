@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import uniqueId from 'lodash/util';
 import keyBy from 'lodash/collection';
 import axios from 'axios';
-import setWatchers from './view';
+import setWatchers, { renderFeed } from './view';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup.string().required().url().notOneOf(arr),
@@ -92,9 +92,14 @@ const app = () => {
     loadStream(url)
       .then((stream) => {
         stream.id = uniqueId();
-        console.log(stream);
+        stream.link = url;
+        state.streams.push(url);
+        renderFeed(stream, ui);
+        state.form.processState = 'filling';
+        state.form.fields.url = '';
       })
       .catch((error) => {
+        state.form.processError = 'failed';
         state.form.errors = { error };
       });
   });
