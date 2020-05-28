@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import * as yup from 'yup';
-import _ from 'lodash';
+import uniqueId from 'lodash/util';
+import keyBy from 'lodash/collection';
 import axios from 'axios';
 import setWatchers from './view';
 
@@ -15,7 +16,7 @@ const updateValidationState = (state) => {
     state.form.valid = true;
     state.form.errors = {};
   } catch (e) {
-    const errors = _.keyBy(e.inner, 'path');
+    const errors = keyBy(e.inner, 'path');
     // console.log(errors);
     state.form.valid = false;
     state.form.errors = errors;
@@ -89,11 +90,12 @@ const app = () => {
     const { url } = state.form.fields;
 
     loadStream(url)
-      .then((response) => {
-        console.log(response);
+      .then((stream) => {
+        stream.id = uniqueId();
+        console.log(stream);
       })
       .catch((error) => {
-        console.log(error);
+        state.form.errors = { error };
       });
   });
 
