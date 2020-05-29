@@ -1,9 +1,8 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import * as yup from 'yup';
-import uniqueId from 'lodash/util';
-import keyBy from 'lodash/collection';
+import { uniqueId, keyBy } from 'lodash';
 import axios from 'axios';
-import setWatchers, { renderFeed } from './view';
+import { setWatchers, renderFeed } from './view';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup.string().required().url().notOneOf(arr),
@@ -44,6 +43,8 @@ const parseRSS = (text) => {
     const link = item.querySelector('link').innerHTML;
     result.items.push({ title, description, link });
   });
+
+  // console.log(result);
 
   return Promise.resolve(result);
 };
@@ -94,11 +95,13 @@ const app = () => {
         stream.id = uniqueId();
         stream.link = url;
         state.streams.push(url);
-        renderFeed(stream, ui);
+        // console.log(stream);
+        renderFeed(stream);
         state.form.processState = 'filling';
         state.form.fields.url = '';
       })
       .catch((error) => {
+        console.log(error);
         state.form.processError = 'failed';
         state.form.errors = { error };
       });

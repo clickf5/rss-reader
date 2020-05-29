@@ -21,7 +21,7 @@ const resetUrl = (ui) => {
   url.value = '';
 };
 
-export const renderFeed = (stream, ui) => {
+const renderFeed = (stream) => {
   console.log(stream);
 };
 
@@ -62,4 +62,4 @@ const setWatchers = (state, ui) => {
   });
 };
 
-export default setWatchers;
+export { setWatchers, renderFeed };
