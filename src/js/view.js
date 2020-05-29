@@ -22,7 +22,7 @@ const resetUrl = (ui) => {
 };
 
 const renderFeed = (stream) => {
-  console.log(stream);
+  // console.log(stream);
 };
 
 const setWatchers = (state, ui) => {

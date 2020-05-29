@@ -3,7 +3,6 @@ import path from 'path';
 import { html } from 'js-beautify';
 import userEvent from '@testing-library/user-event';
 import timer from 'timer-promise';
-import axios from 'axios';
 import axiosVCR from 'axios-vcr';
 
 import app from '../src/js/application';
@@ -16,7 +15,6 @@ const htmlOptions = {
 const fixturesPath = path.join(__dirname, '__fixtures__');
 const getTree = () => html(document.body.innerHTML, htmlOptions);
 
-const rssLinkWithCORS = 'https://cors-anywhere.herokuapp.com/https://vc.ru/rss';
 const cassette = path.join(fixturesPath, 'response.json');
 
 let elements;
@@ -29,13 +27,8 @@ beforeEach((done) => {
       app();
       elements = {
         url: document.querySelector('[name="url"]'),
-        submit: document.querySelector('[type="submit"]'),
+        form: document.querySelector('form.rss-form'),
       };
-      axiosVCR.mountCassette(cassette);
-      return axios.get(rssLinkWithCORS);
-    })
-    .then(() => {
-      axiosVCR.ejectCassette(cassette);
       done();
     });
 });
@@ -68,10 +61,16 @@ test('double url', () => {
   axiosVCR.mountCassette(cassette);
   return Promise
     .resolve()
-    .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
-    .then(() => elements.url.setAttribute('value', 'https://vc.ru/rss'))
+    .then(() => {
+      userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true });
+      elements.url.setAttribute('value', 'https://vc.ru/rss');
+      return timer.start(10);
+    })
+    .then(() => elements.form.submit())
     .then(() => timer.start(10))
-    .then(() => userEvent.click(elements.submit))
+    .then(() => timer.start(10))
+    .then(() => timer.start(10))
+    .then(() => timer.start(10))
     .then(() => timer.start(10))
     .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
     .then(() => elements.url.setAttribute('value', 'https://vc.ru/rss'))
