@@ -22,8 +22,9 @@ const resetUrl = (ui) => {
 };
 
 const renderFeed = (stream, ui) => {
-  const { title, description, items, id } = stream;
-  // console.log(stream);
+  const {
+    title, description, items, id,
+  } = stream;
   const feedWrapper = document.createElement('div');
 
   const feedLink = document.createElement('a');
