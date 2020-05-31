@@ -29,22 +29,30 @@ const parseRSS = (text) => {
     items: [],
   };
 
-  const domparser = new DOMParser();
-  const mime = 'text/xml';
-  const xml = domparser.parseFromString(text, mime);
+  const promise = new Promise((resolve, reject) => {
+    try {
+      const domparser = new DOMParser();
+      const mime = 'text/xml';
+      const xml = domparser.parseFromString(text, mime);
 
-  result.title = xml.querySelector('channel title').textContent;
-  result.description = xml.querySelector('channel description').textContent;
+      result.title = xml.querySelector('channel title').textContent;
+      result.description = xml.querySelector('channel description').textContent;
 
-  const items = xml.querySelectorAll('item');
-  items.forEach((item) => {
-    const title = item.querySelector('title').textContent;
-    const description = item.querySelector('description').textContent;
-    const link = item.querySelector('link').innerHTML;
-    result.items.push({ title, description, link });
+      const items = xml.querySelectorAll('item');
+      items.forEach((item) => {
+        const title = item.querySelector('title').textContent;
+        const description = item.querySelector('description').textContent;
+        const link = item.querySelector('link').innerHTML;
+        result.items.push({ title, description, link });
+      });
+
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
   });
 
-  return Promise.resolve(result);
+  return promise;
 };
 
 const loadStream = (url) => {
@@ -80,13 +88,13 @@ const app = () => {
     rssLinks: document.querySelector('div.rss-links'),
   };
 
-  ui.elements.url.addEventListener('input', (e) => {
-    state.form.fields.url = e.target.value;
+  ui.elements.url.addEventListener('input', (event) => {
+    state.form.fields.url = event.target.value;
     updateValidationState(state);
   });
 
-  ui.form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  ui.form.addEventListener('submit', (event) => {
+    event.preventDefault();
     state.form.processState = 'sending';
     const { url } = state.form.fields;
 
@@ -100,9 +108,8 @@ const app = () => {
         state.form.fields.url = '';
       })
       .catch((error) => {
-        console.log(error);
-        state.form.processError = 'failed';
-        state.form.errors = { error };
+        state.form.processState = 'failed';
+        state.form.errors = { url: error };
       });
   });
 
