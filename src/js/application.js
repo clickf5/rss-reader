@@ -44,8 +44,6 @@ const parseRSS = (text) => {
     result.items.push({ title, description, link });
   });
 
-  // console.log(result);
-
   return Promise.resolve(result);
 };
 
@@ -78,6 +76,8 @@ const app = () => {
     },
     submitButton: document.querySelector('button[type="submit"]'),
     feedback: document.querySelector('div.feedback'),
+    rssItems: document.querySelector('div.rss-items'),
+    rssLinks: document.querySelector('div.rss-links'),
   };
 
   ui.elements.url.addEventListener('input', (e) => {
@@ -94,9 +94,8 @@ const app = () => {
       .then((stream) => {
         stream.id = uniqueId();
         stream.link = url;
+        renderFeed(stream, ui);
         state.streams.push(url);
-        // console.log(stream);
-        renderFeed(stream);
         state.form.processState = 'filling';
         state.form.fields.url = '';
       })

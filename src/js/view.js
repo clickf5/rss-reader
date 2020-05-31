@@ -21,8 +21,32 @@ const resetUrl = (ui) => {
   url.value = '';
 };
 
-const renderFeed = (stream) => {
+const renderFeed = (stream, ui) => {
+  const { title, description, items, id } = stream;
   // console.log(stream);
+  const feedWrapper = document.createElement('div');
+
+  const feedLink = document.createElement('a');
+  feedLink.setAttribute('href', `#${id}`);
+  feedLink.innerText = title;
+  feedWrapper.append(feedLink);
+
+  const feedDescription = document.createElement('div');
+  feedDescription.innerText = description;
+  feedWrapper.append(feedDescription);
+  feedWrapper.append(document.createElement('hr'));
+
+  ui.rssItems.append(feedWrapper);
+
+  const feedItemsWprapper = document.createElement('div');
+  feedItemsWprapper.setAttribute('data-id', id);
+  const rssLinks = items
+    .reduce((acc, item) => [...acc, `<a href=${item.link}>${item.title}</a>`], [])
+    .join(' | ');
+  feedItemsWprapper.innerHTML = rssLinks;
+  feedItemsWprapper.append(document.createElement('hr'));
+
+  ui.rssLinks.append(feedItemsWprapper);
 };
 
 const setWatchers = (state, ui) => {
