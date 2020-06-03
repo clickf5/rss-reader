@@ -42,8 +42,8 @@ const renderFeed = (stream, ui) => {
   const feedItemsWprapper = document.createElement('div');
   feedItemsWprapper.setAttribute('data-id', id);
   const rssLinks = items
-    .reduce((acc, item) => [...acc, `<a href=${item.link}>${item.title}</a>`], [])
-    .join(' | ');
+    .reduce((acc, item) => [...acc, `<div><a href=${item.link}>${item.title}</a></div>`], [])
+    .join('');
   feedItemsWprapper.innerHTML = rssLinks;
   feedItemsWprapper.append(document.createElement('hr'));
 
