@@ -21,33 +21,20 @@ const resetUrl = (ui) => {
   url.value = '';
 };
 
-const renderFeed = (stream, ui) => {
-  const {
-    title, description, items, id,
-  } = stream;
-  const feedWrapper = document.createElement('div');
-
-  const feedLink = document.createElement('a');
-  feedLink.setAttribute('href', `#${id}`);
-  feedLink.innerText = title;
-  feedWrapper.append(feedLink);
-
-  const feedDescription = document.createElement('div');
-  feedDescription.innerText = description;
-  feedWrapper.append(feedDescription);
-  feedWrapper.append(document.createElement('hr'));
-
-  ui.rssItems.append(feedWrapper);
-
-  const feedItemsWprapper = document.createElement('div');
-  feedItemsWprapper.setAttribute('data-id', id);
-  const rssLinks = items
-    .reduce((acc, item) => [...acc, `<div><a href=${item.link}>${item.title}</a></div>`], [])
+const renderFeeds = (feeds, ui) => {
+  const { rssItems } = ui;
+  const feedsHTML = feeds
+    .reduce((acc, feed) => [...acc, `<div><div>${feed.title}</div><div>${feed.description}</div></div><hr>`], [])
     .join('');
-  feedItemsWprapper.innerHTML = rssLinks;
-  feedItemsWprapper.append(document.createElement('hr'));
+  rssItems.innerHTML = feedsHTML;
+};
 
-  ui.rssLinks.append(feedItemsWprapper);
+const renderPosts = (posts, ui) => {
+  const { rssLinks } = ui;
+  const postsHTML = posts
+    .reduce((acc, post) => [...acc, `<div><a href=${post.link}>${post.title}</a></div>`], [])
+    .join('');
+  rssLinks.innerHTML = postsHTML;
 };
 
 const setWatchers = (state, ui) => {
@@ -85,6 +72,16 @@ const setWatchers = (state, ui) => {
       resetUrl(ui);
     }
   });
+
+  watch(state, 'feeds', () => {
+    const { feeds } = state;
+    renderFeeds(feeds, ui);
+  });
+
+  watch(state, 'posts', () => {
+    const { posts } = state;
+    renderPosts(posts, ui);
+  });
 };
 
-export { setWatchers, renderFeed };
+export default setWatchers;

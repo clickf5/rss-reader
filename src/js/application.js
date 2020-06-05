@@ -2,7 +2,7 @@
 import * as yup from 'yup';
 import { uniqueId, keyBy } from 'lodash';
 import axios from 'axios';
-import { setWatchers, renderFeed } from './view';
+import setWatchers from './view';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup.string().required().url().notOneOf(arr),
@@ -75,6 +75,8 @@ const app = () => {
       errors: {},
     },
     streams: [],
+    feeds: [],
+    posts: [],
   };
 
   const ui = {
@@ -100,10 +102,19 @@ const app = () => {
 
     loadStream(url)
       .then((stream) => {
-        stream.id = uniqueId();
-        stream.link = url;
-        renderFeed(stream, ui);
+        const { title, description, items } = stream;
+        const feed = { title, description };
+        feed.id = uniqueId();
+        feed.link = url;
         state.streams.push(url);
+        state.feeds = [feed, ...state.feeds];
+
+        const posts = items.map((item) => {
+          item.feedId = feed.id;
+          return item;
+        });
+        state.posts = [...posts, ...state.posts];
+
         state.form.processState = 'filling';
         state.form.fields.url = '';
       })
