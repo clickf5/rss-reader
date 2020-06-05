@@ -2,10 +2,16 @@
 import * as yup from 'yup';
 import { uniqueId, keyBy } from 'lodash';
 import axios from 'axios';
+import i18next from 'i18next';
 import setWatchers from './view';
+import ru from './locales/ru';
 
 const getSchema = (arr) => yup.object().shape({
-  url: yup.string().required().url().notOneOf(arr),
+  url: yup
+    .string()
+    .required(i18next.t('validation.required'))
+    .url(i18next.t('validation.url'))
+    .notOneOf(arr),
 });
 
 const updateValidationState = (state) => {
@@ -64,6 +70,14 @@ const loadStream = (url) => {
 };
 
 const app = () => {
+  i18next.init({
+    lng: 'ru',
+    debug: true,
+    resources: {
+      ru,
+    },
+  });
+
   const state = {
     form: {
       processState: 'filling',
