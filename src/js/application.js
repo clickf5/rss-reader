@@ -11,7 +11,7 @@ const getSchema = (arr) => yup.object().shape({
     .string()
     .required(i18next.t('validation.required'))
     .url(i18next.t('validation.url'))
-    .notOneOf(arr),
+    .notOneOf(arr, (err) => i18next.t('validation.notOneOf', { values: `${err.values}` })),
 });
 
 const updateValidationState = (state) => {
