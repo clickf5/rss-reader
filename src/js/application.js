@@ -4,7 +4,6 @@ import { uniqueId, keyBy } from 'lodash';
 import axios from 'axios';
 import i18next from 'i18next';
 import setWatchers from './view';
-import ru from './locales/ru';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup
@@ -22,7 +21,6 @@ const updateValidationState = (state) => {
     state.form.errors = {};
   } catch (e) {
     const errors = keyBy(e.inner, 'path');
-    // console.log(errors);
     state.form.valid = false;
     state.form.errors = errors;
   }
@@ -70,14 +68,6 @@ const loadStream = (url) => {
 };
 
 const app = () => {
-  i18next.init({
-    lng: 'ru',
-    debug: true,
-    resources: {
-      ru,
-    },
-  });
-
   const state = {
     form: {
       processState: 'filling',
@@ -132,9 +122,9 @@ const app = () => {
         state.form.processState = 'filling';
         state.form.fields.url = '';
       })
-      .catch((error) => {
+      .catch(() => {
         state.form.processState = 'failed';
-        state.form.errors = { url: error };
+        state.form.errors = { url: { message: i18next.t('network.error') } };
       });
   });
 
