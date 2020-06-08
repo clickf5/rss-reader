@@ -33,30 +33,26 @@ const parseRSS = (text) => {
     items: [],
   };
 
-  const promise = new Promise((resolve, reject) => {
-    try {
-      const domparser = new DOMParser();
-      const mime = 'text/xml';
-      const xml = domparser.parseFromString(text, mime);
+  try {
+    const domparser = new DOMParser();
+    const mime = 'text/xml';
+    const xml = domparser.parseFromString(text, mime);
 
-      result.title = xml.querySelector('channel title').textContent;
-      result.description = xml.querySelector('channel description').textContent;
+    result.title = xml.querySelector('channel title').textContent;
+    result.description = xml.querySelector('channel description').textContent;
 
-      const items = xml.querySelectorAll('item');
-      items.forEach((item) => {
-        const title = item.querySelector('title').textContent;
-        const description = item.querySelector('description').textContent;
-        const link = item.querySelector('link').innerHTML;
-        result.items.push({ title, description, link });
-      });
+    const items = xml.querySelectorAll('item');
+    items.forEach((item) => {
+      const title = item.querySelector('title').textContent;
+      const description = item.querySelector('description').textContent;
+      const link = item.querySelector('link').innerHTML;
+      result.items.push({ title, description, link });
+    });
+  } catch (e) {
+    throw new Error(e);
+  }
 
-      resolve(result);
-    } catch (error) {
-      reject(error);
-    }
-  });
-
-  return promise;
+  return result;
 };
 
 const loadStream = (url) => {
