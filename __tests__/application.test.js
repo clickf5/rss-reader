@@ -23,8 +23,8 @@ beforeEach((done) => {
       document.documentElement.innerHTML = initHTML;
       app();
       elements = {
-        url: document.querySelector('[name="url"]'),
-        form: document.querySelector('form.rss-form'),
+        url: document.querySelector('input[name="url"]'),
+        form: document.querySelector('.rss-form'),
       };
       done();
     });
@@ -35,21 +35,27 @@ test('init and wrong url', () => {
   return Promise
     .resolve()
     .then(() => userEvent.type(elements.url, 'wrong url', { allAtOnce: true }))
-    .then(() => elements.url.setAttribute('value', 'wrong url'))
-    .then(() => timer.start(10))
+    .then(() => {
+      elements.url.setAttribute('value', 'wrong url');
+      return timer.start(10);
+    })
     .then(() => expect(getTree()).toMatchSnapshot());
 });
 
 test('valid url', () => Promise
   .resolve()
   .then(() => userEvent.type(elements.url, 'https://vc.ru/rss', { allAtOnce: true }))
-  .then(() => elements.url.setAttribute('value', 'https://vc.ru/rss'))
-  .then(() => timer.start(10))
+  .then(() => {
+    elements.url.setAttribute('value', 'https://vc.ru/rss');
+    return timer.start(10);
+  })
   .then(() => expect(getTree()).toMatchSnapshot()));
 
 test('required url', () => Promise
   .resolve()
   .then(() => userEvent.type(elements.url, '', { allAtOnce: true }))
-  .then(() => elements.url.setAttribute('value', ''))
-  .then(() => timer.start(10))
+  .then(() => {
+    elements.url.setAttribute('value', '');
+    return timer.start(10);
+  })
   .then(() => expect(getTree()).toMatchSnapshot()));
