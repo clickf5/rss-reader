@@ -6,17 +6,6 @@ import i18next from 'i18next';
 import setWatchers from './view';
 import parse from './parser';
 
-const ui = {
-  form: document.querySelector('.rss-form'),
-  elements: {
-    url: document.querySelector('input[name="url"]'),
-  },
-  submitButton: document.querySelector('button[type="submit"]'),
-  feedback: document.querySelector('div.feedback'),
-  rssItems: document.querySelector('div.rss-items'),
-  rssLinks: document.querySelector('div.rss-links'),
-};
-
 const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
 const getSchema = (urls) => yup.object().shape({
@@ -71,6 +60,17 @@ const app = () => {
     },
     feeds: [],
     posts: [],
+  };
+
+  const ui = {
+    form: document.querySelector('.rss-form'),
+    elements: {
+      url: document.querySelector('input[name="url"]'),
+    },
+    submitButton: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('div.feedback'),
+    rssItems: document.querySelector('div.rss-items'),
+    rssLinks: document.querySelector('div.rss-links'),
   };
 
   ui.elements.url.addEventListener('input', (event) => {
