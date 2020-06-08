@@ -6,6 +6,15 @@ import i18next from 'i18next';
 import setWatchers from './view';
 import parse from './parser';
 
+const ui = {
+  form: document.querySelector('.rss-form'),
+  urlInput: document.querySelector('input[name="url"]'),
+  submitButton: document.querySelector('button[type="submit"]'),
+  feedback: document.querySelector('div.feedback'),
+  rssItems: document.querySelector('div.rss-items'),
+  rssLinks: document.querySelector('div.rss-links'),
+};
+
 const getSchema = (arr) => yup.object().shape({
   url: yup
     .string()
@@ -51,18 +60,7 @@ const app = () => {
     posts: [],
   };
 
-  const ui = {
-    form: document.querySelector('.rss-form'),
-    elements: {
-      url: document.querySelector('input[name="url"]'),
-    },
-    submitButton: document.querySelector('button[type="submit"]'),
-    feedback: document.querySelector('div.feedback'),
-    rssItems: document.querySelector('div.rss-items'),
-    rssLinks: document.querySelector('div.rss-links'),
-  };
-
-  ui.elements.url.addEventListener('input', (event) => {
+  ui.urlInput.addEventListener('input', (event) => {
     state.form.fields.url = event.target.value;
     updateValidationState(state);
   });
