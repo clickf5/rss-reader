@@ -1,9 +1,6 @@
 const parse = (text) => {
   const result = {
-    feed: {
-      title: '',
-      description: '',
-    },
+    feed: {},
     items: [],
   };
   try {
