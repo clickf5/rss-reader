@@ -4,6 +4,7 @@ import { uniqueId, keyBy } from 'lodash';
 import axios from 'axios';
 import i18next from 'i18next';
 import setWatchers from './view';
+import parse from './parser';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup
@@ -26,41 +27,12 @@ const updateValidationState = (state) => {
   }
 };
 
-const parseRSS = (text) => {
-  const result = {
-    title: '',
-    description: '',
-    items: [],
-  };
-
-  try {
-    const domparser = new DOMParser();
-    const mime = 'text/xml';
-    const xml = domparser.parseFromString(text, mime);
-
-    result.title = xml.querySelector('channel title').textContent;
-    result.description = xml.querySelector('channel description').textContent;
-
-    const items = xml.querySelectorAll('item');
-    items.forEach((item) => {
-      const title = item.querySelector('title').textContent;
-      const description = item.querySelector('description').textContent;
-      const link = item.querySelector('link').innerHTML;
-      result.items.push({ title, description, link });
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
-
-  return result;
-};
-
 const loadStream = (url) => {
   const corsApiHost = 'cors-anywhere.herokuapp.com';
   const corsApiUrl = `https://${corsApiHost}/`;
   const urlWithCors = `${corsApiUrl}${url}`;
   return axios.get(urlWithCors)
-    .then(({ data }) => parseRSS(data));
+    .then(({ data }) => parse(data));
 };
 
 const app = () => {
