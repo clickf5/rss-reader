@@ -8,12 +8,16 @@ import parse from './parser';
 
 const ui = {
   form: document.querySelector('.rss-form'),
-  urlInput: document.querySelector('input[name="url"]'),
+  elements: {
+    url: document.querySelector('input[name="url"]'),
+  },
   submitButton: document.querySelector('button[type="submit"]'),
   feedback: document.querySelector('div.feedback'),
   rssItems: document.querySelector('div.rss-items'),
   rssLinks: document.querySelector('div.rss-links'),
 };
+
+const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
 const getSchema = (arr) => yup.object().shape({
   url: yup
@@ -36,13 +40,8 @@ const updateValidationState = (state) => {
   }
 };
 
-const loadStream = (url) => {
-  const corsApiHost = 'cors-anywhere.herokuapp.com';
-  const corsApiUrl = `https://${corsApiHost}/`;
-  const urlWithCors = `${corsApiUrl}${url}`;
-  return axios.get(urlWithCors)
-    .then(({ data }) => parse(data));
-};
+const loadStream = (url) => axios.get(`${corsUrl}${url}`)
+  .then(({ data }) => parse(data));
 
 const app = () => {
   const state = {
@@ -60,7 +59,7 @@ const app = () => {
     posts: [],
   };
 
-  ui.urlInput.addEventListener('input', (event) => {
+  ui.elements.url.addEventListener('input', (event) => {
     state.form.fields.url = event.target.value;
     updateValidationState(state);
   });
@@ -88,9 +87,15 @@ const app = () => {
         state.form.processState = 'filling';
         state.form.fields.url = '';
       })
-      .catch(() => {
+      .catch((e) => {
         state.form.processState = 'failed';
-        state.form.errors = { url: { message: i18next.t('network.error') } };
+        switch (e.type) {
+          case 'parse':
+            state.form.errors = { url: { message: i18next.t('errors.parse') } };
+            break;
+          default:
+            state.form.errors = { url: { message: i18next.t('errors.network') } };
+        }
       });
   });
 

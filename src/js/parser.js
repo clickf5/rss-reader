@@ -20,8 +20,10 @@ const parse = (text) => {
       const link = item.querySelector('link').innerHTML;
       result.items.push({ title, description, link });
     });
-  } catch (e) {
-    throw new Error(e);
+  } catch {
+    const error = new Error();
+    error.type = 'parse';
+    throw error;
   }
 
   return result;
