@@ -62,8 +62,7 @@ const setWatchers = (state, ui) => {
   });
 
   watch(state.form, 'errors', () => {
-    const { errors } = state.form;
-    renderErrors(ui, errors);
+    renderErrors(ui, state.form.errors);
   });
 
   watch(state.form.fields, 'url', () => {
@@ -74,13 +73,11 @@ const setWatchers = (state, ui) => {
   });
 
   watch(state, 'feeds', () => {
-    const { feeds } = state;
-    renderFeeds(feeds, ui);
+    renderFeeds(state.feeds, ui);
   });
 
   watch(state, 'posts', () => {
-    const { posts } = state;
-    renderPosts(posts, ui);
+    renderPosts(state.posts, ui);
   });
 };
 
