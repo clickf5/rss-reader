@@ -1,6 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import * as yup from 'yup';
-import { uniqueId, keyBy } from 'lodash';
+import { uniqueId, keyBy, differenceBy } from 'lodash';
 import axios from 'axios';
 import i18next from 'i18next';
 import setWatchers from './view';
@@ -19,17 +19,18 @@ const ui = {
 
 const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
-const getSchema = (arr) => yup.object().shape({
+const getSchema = (urls) => yup.object().shape({
   url: yup
     .string()
     .required(i18next.t('validation.required'))
     .url(i18next.t('validation.url'))
-    .notOneOf(arr, (err) => i18next.t('validation.notOneOf', { values: `${err.values}` })),
+    .notOneOf(urls, (err) => i18next.t('validation.notOneOf', { values: `${err.values}` })),
 });
 
 const updateValidationState = (state) => {
   try {
-    const schema = getSchema(state.streams);
+    const urls = state.feeds.map((feed) => feed.link);
+    const schema = getSchema(urls);
     schema.validateSync(state.form.fields, { abortEarly: false });
     state.form.valid = true;
     state.form.errors = {};
@@ -43,6 +44,20 @@ const updateValidationState = (state) => {
 const loadStream = (url) => axios.get(`${corsUrl}${url}`)
   .then(({ data }) => parse(data));
 
+const reloadStream = (url, feedId, state) => {
+  const feedPosts = state.posts.filter((post) => post.feedId === feedId);
+
+  loadStream(url)
+    .then((stream) => {
+      const { items } = stream;
+      const posts = differenceBy(items, feedPosts, 'guid');
+      if (posts.length !== 0) {
+        state.posts = [...posts, ...state.posts];
+      }
+      setTimeout(() => reloadStream(url, feedId, state), 5000);
+    });
+};
+
 const app = () => {
   const state = {
     form: {
@@ -54,7 +69,6 @@ const app = () => {
       valid: true,
       errors: {},
     },
-    streams: [],
     feeds: [],
     posts: [],
   };
@@ -71,11 +85,10 @@ const app = () => {
 
     loadStream(url)
       .then((stream) => {
-        const { title, description, items } = stream;
-        const feed = { title, description };
+        const { feed, items } = stream;
         feed.id = uniqueId();
         feed.link = url;
-        state.streams.push(url);
+
         state.feeds = [feed, ...state.feeds];
 
         const posts = items.map((item) => {
@@ -86,6 +99,8 @@ const app = () => {
 
         state.form.processState = 'filling';
         state.form.fields.url = '';
+
+        setTimeout(() => reloadStream(url, feed.id, state), 5000);
       })
       .catch((e) => {
         state.form.processState = 'failed';

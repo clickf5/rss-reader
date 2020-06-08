@@ -1,7 +1,9 @@
 const parse = (text) => {
   const result = {
-    title: '',
-    description: '',
+    feed: {
+      title: '',
+      description: '',
+    },
     items: [],
   };
 
@@ -10,15 +12,22 @@ const parse = (text) => {
     const mime = 'text/xml';
     const xml = domparser.parseFromString(text, mime);
 
-    result.title = xml.querySelector('channel title').textContent;
-    result.description = xml.querySelector('channel description').textContent;
+    result.feed.title = xml.querySelector('channel title').textContent;
+    result.feed.description = xml.querySelector('channel description').textContent;
 
     const items = xml.querySelectorAll('item');
     items.forEach((item) => {
       const title = item.querySelector('title').textContent;
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').innerHTML;
-      result.items.push({ title, description, link });
+      const guid = item.querySelector('guid').textContent;
+      const post = {
+        title,
+        description,
+        link,
+        guid,
+      };
+      result.items.push(post);
     });
   } catch {
     const error = new Error();
