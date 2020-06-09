@@ -24,11 +24,9 @@ const updateValidationState = (state) => {
     state.form.valid = true;
     state.form.errors = {};
   } catch (e) {
-    console.log(e);
     const errors = keyBy(e.inner, 'path');
     state.form.valid = false;
     state.form.errors = errors;
-    console.log(errors);
   }
 };
 
