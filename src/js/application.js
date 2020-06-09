@@ -8,7 +8,7 @@ import parse from './parser';
 
 const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
-const getSchema = (urls) => yup.object().shape({
+const getValidationSchema = (urls) => yup.object().shape({
   url: yup
     .string()
     .required(i18next.t('validation.required'))
@@ -19,14 +19,16 @@ const getSchema = (urls) => yup.object().shape({
 const updateValidationState = (state) => {
   try {
     const urls = state.feeds.map((feed) => feed.link);
-    const schema = getSchema(urls);
-    schema.validateSync(state.form.fields, { abortEarly: false });
+    const validationSchema = getValidationSchema(urls);
+    validationSchema.validateSync(state.form.fields, { abortEarly: false });
     state.form.valid = true;
     state.form.errors = {};
   } catch (e) {
+    console.log(e);
     const errors = keyBy(e.inner, 'path');
     state.form.valid = false;
     state.form.errors = errors;
+    console.log(errors);
   }
 };
 
