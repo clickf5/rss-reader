@@ -24,7 +24,7 @@ const resetUrl = (ui) => {
 const renderFeeds = (feeds, ui) => {
   const { rssItems } = ui;
   const feedsHTML = feeds
-    .reduce((acc, feed) => [...acc, `<div><div>${feed.title}</div><div>${feed.description}</div></div><hr>`], [])
+    .map((feed) => `<div><div>${feed.title}</div><div>${feed.description}</div></div><hr>`)
     .join('');
   rssItems.innerHTML = feedsHTML;
 };
@@ -32,7 +32,7 @@ const renderFeeds = (feeds, ui) => {
 const renderPosts = (posts, ui) => {
   const { rssLinks } = ui;
   const postsHTML = posts
-    .reduce((acc, post) => [...acc, `<div><a href=${post.link}>${post.title}</a></div>`], [])
+    .map((post) => `<div><a href=${post.link}>${post.title}</a></div>`)
     .join('');
   rssLinks.innerHTML = postsHTML;
 };
