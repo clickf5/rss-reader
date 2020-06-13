@@ -10,12 +10,15 @@ const parse = (text) => {
     result.feed.description = xml.querySelector('channel description').textContent;
     const items = xml.querySelectorAll('item');
     items.forEach((item) => {
-      result.items.push({
-        title: item.querySelector('title').textContent,
-        description: item.querySelector('description').textContent,
-        link: item.querySelector('link').innerHTML,
-        guid: item.querySelector('guid').textContent,
-      });
+      result.items = [
+        ...result.items,
+        {
+          title: item.querySelector('title').textContent,
+          description: item.querySelector('description').textContent,
+          link: item.querySelector('link').innerHTML,
+          guid: item.querySelector('guid').textContent,
+        },
+      ];
     });
   } catch {
     const error = new Error();
