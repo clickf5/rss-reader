@@ -35,7 +35,7 @@ exports[`init and wrong url 2`] = `
             </div>
             <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\" disabled=\\"\\">Add</button>
         </form>
-        <div class=\\"feedback text-danger\\">url must be a valid URL</div>
+        <div class=\\"feedback text-danger\\">Field value must be a valid URL</div>
     </div>
     <div class=\\"row\\">
         <div class=\\"col rss-items\\"></div>
@@ -59,7 +59,7 @@ exports[`required url 1`] = `
             </div>
             <button type=\\"submit\\" class=\\"btn btn-primary ml-1\\" disabled=\\"\\">Add</button>
         </form>
-        <div class=\\"feedback text-danger\\">url is a required field</div>
+        <div class=\\"feedback text-danger\\">Field is required</div>
     </div>
     <div class=\\"row\\">
         <div class=\\"col rss-items\\"></div>

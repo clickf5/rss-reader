@@ -3,7 +3,8 @@ import path from 'path';
 import { html } from 'js-beautify';
 import userEvent from '@testing-library/user-event';
 import timer from 'timer-promise';
-
+import i18next from 'i18next';
+import en from '../src/js/locales/en';
 import app from '../src/js/application';
 
 const htmlOptions = {
@@ -17,7 +18,15 @@ const getTree = () => html(document.body.innerHTML, htmlOptions);
 let elements;
 
 beforeEach((done) => {
-  fs.readFile(path.join(fixturesPath, 'index.html'))
+  i18next
+    .init({
+      lng: 'en',
+      debug: false,
+      resources: {
+        en,
+      },
+    })
+    .then(() => fs.readFile(path.join(fixturesPath, 'index.html')))
     .then((data) => {
       const initHTML = data.toString();
       document.documentElement.innerHTML = initHTML;
