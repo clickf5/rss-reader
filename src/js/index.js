@@ -6,7 +6,7 @@ import app from './application';
 i18next
   .init({
     lng: 'en',
-    debug: true,
+    debug: false,
     resources: {
       en,
     },
