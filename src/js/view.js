@@ -1,4 +1,5 @@
 import { watch } from 'melanke-watchjs';
+import i18next from 'i18next';
 
 const renderErrors = (ui, errors) => {
   const { feedback, elements } = ui;
@@ -11,7 +12,8 @@ const renderErrors = (ui, errors) => {
       return;
     }
     feedback.classList.add('text-danger');
-    feedback.innerHTML = error.message;
+    const [key, values] = error.message.split('|');
+    feedback.innerHTML = i18next.t(key, { values });
     element.classList.add('is-invalid');
   });
 };

@@ -2,7 +2,6 @@
 import * as yup from 'yup';
 import { uniqueId, keyBy, differenceBy } from 'lodash';
 import axios from 'axios';
-import i18next from 'i18next';
 import setWatchers from './view';
 import parse from './parser';
 
@@ -11,9 +10,9 @@ const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 const getValidationSchema = (urls) => yup.object().shape({
   url: yup
     .string()
-    .required(i18next.t('validation.required'))
-    .url(i18next.t('validation.url'))
-    .notOneOf(urls, (err) => i18next.t('validation.notOneOf', { values: `${err.values}` })),
+    .required('validation.required')
+    .url('validation.url')
+    .notOneOf(urls, `validation.notOneOf|${urls}`),
 });
 
 const updateValidationState = (state) => {
@@ -31,7 +30,11 @@ const updateValidationState = (state) => {
 };
 
 const loadStream = (url) => axios.get(`${corsUrl}${url}`)
+  .catch(() => {
+    throw new Error('errors.network');
+  })
   .then(({ data }) => parse(data));
+
 
 const reloadStream = (url, feedId, state) => {
   const feedPosts = state.posts.filter((post) => post.feedId === feedId);
@@ -104,13 +107,7 @@ const app = () => {
       })
       .catch((e) => {
         state.form.processState = 'failed';
-        switch (e.type) {
-          case 'parse':
-            state.form.errors = { url: { message: i18next.t('errors.parse') } };
-            break;
-          default:
-            state.form.errors = { url: { message: i18next.t('errors.network') } };
-        }
+        state.form.errors = { url: { message: e.message } };
       });
   });
 

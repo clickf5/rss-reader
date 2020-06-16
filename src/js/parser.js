@@ -1,5 +1,3 @@
-import ParseError from './ParseError';
-
 const parse = (text) => {
   const result = {
     feed: {},
@@ -23,7 +21,7 @@ const parse = (text) => {
       ];
     });
   } catch {
-    throw new ParseError();
+    throw new Error('errors.parse');
   }
   return result;
 };
