@@ -35,18 +35,27 @@ const loadStream = (url) => axios.get(`${corsUrl}${url}`)
   })
   .then(({ data }) => parse(data));
 
-
-const reloadStream = (url, feedId, state) => {
-  const feedPosts = state.posts.filter((post) => post.feedId === feedId);
-
-  loadStream(url)
-    .then((stream) => {
-      const { items } = stream;
-      const posts = differenceBy(items, feedPosts, 'guid');
-      if (posts.length !== 0) {
-        state.posts = [...posts, ...state.posts];
+const reloadStreams = (state) => {
+  const promises = state.feeds.map((feed) => {
+    const feedPosts = state.posts.filter((post) => post.feedId === feed.id);
+    return loadStream(feed.link)
+      .then((stream) => differenceBy(stream.items, feedPosts, 'guid'))
+      .then((differencePosts) => differencePosts.map((post) => {
+        post.feedId = feed.id;
+        return post;
+      }));
+  });
+  Promise
+    .allSettled(promises)
+    .then((results) => results.forEach(({ value }) => {
+      if (value.length !== 0) {
+        state.posts = [...value, ...state.posts];
       }
-      setTimeout(() => reloadStream(url, feedId, state), 5000);
+    }))
+    .then(() => {
+      if (state.reload) {
+        state.timerId = setTimeout(() => reloadStreams(state), 5000);
+      }
     });
 };
 
@@ -63,6 +72,8 @@ const app = () => {
     },
     feeds: [],
     posts: [],
+    reload: true,
+    timerId: '',
   };
 
   const ui = {
@@ -83,7 +94,9 @@ const app = () => {
 
   ui.form.addEventListener('submit', (event) => {
     event.preventDefault();
+    clearTimeout(state.timerId);
     state.form.processState = 'sending';
+    state.reload = false;
     const { url } = state.form.fields;
 
     loadStream(url)
@@ -100,10 +113,13 @@ const app = () => {
         });
         state.posts = [...posts, ...state.posts];
 
+        state.reload = true;
         state.form.processState = 'filling';
         state.form.fields.url = '';
 
-        setTimeout(() => reloadStream(url, feed.id, state), 5000);
+        if (state.reload) {
+          state.timerId = setTimeout(() => reloadStreams(state), 5000);
+        }
       })
       .catch((e) => {
         state.form.processState = 'failed';
