@@ -9,17 +9,14 @@ const parse = (text) => {
     result.feed.title = xml.querySelector('channel title').textContent;
     result.feed.description = xml.querySelector('channel description').textContent;
     const items = xml.querySelectorAll('item');
-    items.forEach((item) => {
-      result.items = [
-        ...result.items,
-        {
-          title: item.querySelector('title').textContent,
-          description: item.querySelector('description').textContent,
-          link: item.querySelector('link').innerHTML,
-          guid: item.querySelector('guid').textContent,
-        },
-      ];
-    });
+    result.items = Array
+      .from(items)
+      .map((item) => ({
+        title: item.querySelector('title').textContent,
+        description: item.querySelector('description').textContent,
+        link: item.querySelector('link').innerHTML,
+        guid: item.querySelector('guid').textContent,
+      }));
   } catch {
     throw new Error('errors.parse');
   }
