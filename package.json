@@ -1,13 +1,13 @@
 {
   "name": "rss-reader",
   "version": "0.1.0",
-  "description": "rss-reader",
+  "description": "Simple RSS reader",
   "scripts": {
     "test": "jest --colors"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clickf5/frontend-project-lvl3"
+    "url": "git+https://github.com/clickf5/rss-reader"
   },
   "keywords": [
     "rss",
@@ -17,9 +17,9 @@
   "author": "Eugene Panin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/clickf5/frontend-project-lvl3/issues"
+    "url": "https://github.com/clickf5/rss-reader/issues"
   },
-  "homepage": "https://github.com/clickf5/frontend-project-lvl3#readme",
+  "homepage": "https://github.com/clickf5/rss-reader#readme",
   "jest": {
     "verbose": true,
     "testURL": "http://localhost/"
